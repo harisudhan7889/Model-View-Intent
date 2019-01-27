@@ -9,3 +9,12 @@ Understand the basics of MVI pattern before looking into the code.
  - Mosby MVI
  - RxJava
  - Glide
+
+## About Project
+
+Displays the restaurants available in your location. Used Zomato api to retrieve the restaurants details.
+
+Generate a free basic api from Zomato site (https://developers.zomato.com/api) and add it your `local.properties` like below
+
+`zomato_api_key = "api_key"`
+
