@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_all_8dp">8dp</dimen>
+    <dimen name="margin_all_16dp">16dp</dimen>
+    <dimen name="margin_title_left">124dp</dimen>
+    <dimen name="margin_bottom_button_login">200dp</dimen>
+    <dimen name="margin_activity_horizontal">16dp</dimen>
+
+    <dimen name="image_height">100dp</dimen>
+    <dimen name="description_height">19dp</dimen>
+
+    <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_medium">16sp</dimen>
+</resources>
