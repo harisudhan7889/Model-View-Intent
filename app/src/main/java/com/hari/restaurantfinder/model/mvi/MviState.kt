@@ -6,11 +6,11 @@ import com.hari.restaurantfinder.model.RestaurantsObject
  * @author Hari Hara Sudhan.N
  */
 data class MviState(
-    var isPageLoading: Boolean = false,
-    var isPullToRefresh: Boolean = false,
-    var isMoreRestaurantsLoading: Boolean = false,
-    var restaurantsObject: RestaurantsObject? = null,
-    var error: Throwable? = null) {
+    val isPageLoading: Boolean = false,
+    val isPullToRefresh: Boolean = false,
+    val isMoreRestaurantsLoading: Boolean = false,
+    val restaurantsObject: RestaurantsObject? = null,
+    val error: Throwable? = null) {
 
     fun copy(): Builder {
         return Builder(this)
