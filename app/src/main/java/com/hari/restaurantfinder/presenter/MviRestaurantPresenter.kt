@@ -1,5 +1,7 @@
 package com.hari.restaurantfinder.presenter
 
+import android.util.Log
+import com.google.gson.Gson
 import com.hannesdorfmann.mosby3.mvi.MviBasePresenter
 import com.hari.restaurantfinder.model.StateObject
 import com.hari.restaurantfinder.model.mvi.MviState
@@ -7,6 +9,7 @@ import com.hari.restaurantfinder.model.mvi.PartialMviState
 import com.hari.restaurantfinder.view.MviView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
@@ -24,6 +27,7 @@ class MviRestaurantPresenter(
         val restaurantsState: Observable<PartialMviState> = intent(MviView::emitFirstTimeLoadEvent)
             .subscribeOn(Schedulers.io())
             .debounce(200, TimeUnit.MILLISECONDS)
+            .doOnNext { Log.d("Intent", "First time page load event.") }
             .flatMap { GetRestaurantsUseCase.getRestaurants(latitude, longitude) }
             .observeOn(AndroidSchedulers.mainThread())
 
@@ -31,6 +35,7 @@ class MviRestaurantPresenter(
         val loadMoreRestaurantsState: Observable<PartialMviState> = intent(MviView::emitLoadMoreRestaurantsEvent)
             .subscribeOn(Schedulers.io())
             .debounce(200, TimeUnit.MILLISECONDS)
+            .doOnNext { Log.d("Intent", "Load more restaurants event.") }
             .switchMap { GetRestaurantsUseCase.getMoreRestaurants(latitude, longitude) }
             .observeOn(AndroidSchedulers.mainThread())
 
@@ -38,6 +43,7 @@ class MviRestaurantPresenter(
         val pullToRefreshState: Observable<PartialMviState> = intent(MviView::emitPullToRefreshEvent)
             .subscribeOn(Schedulers.io())
             .debounce(200, TimeUnit.MILLISECONDS)
+            .doOnNext { Log.d("Intent", "Pull to refresh event.") }
             .switchMap { GetRestaurantsUseCase.getRestaurantsByPTR(latitude, longitude) }
             .observeOn(AndroidSchedulers.mainThread())
 
@@ -47,8 +53,12 @@ class MviRestaurantPresenter(
             pullToRefreshState)
 
         val initializeState = MviState(isPageLoading = true)
+        val stateObservable = allViewState
+            .scan(initializeState, this::viewStateReducer)
+            .doOnNext { Log.d("State", Gson().toJson(it)) }
+
         subscribeViewState(
-            allViewState.scan(initializeState, this::viewStateReducer),
+            stateObservable,
             MviView::displayRestaurants
         )
     }
