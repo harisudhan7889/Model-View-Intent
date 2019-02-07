@@ -27,7 +27,7 @@ class MviRestaurantPresenter(
         val restaurantsState: Observable<PartialMviState> = intent(MviView::emitFirstTimeLoadEvent)
             .subscribeOn(Schedulers.io())
             .debounce(200, TimeUnit.MILLISECONDS)
-            .doOnNext { Log.d("Intent", "First time page load event.") }
+            .doOnNext { Log.d("Action", "First time page load event.") }
             .flatMap { GetRestaurantsUseCase.getRestaurants(latitude, longitude) }
             .observeOn(AndroidSchedulers.mainThread())
 
@@ -35,7 +35,7 @@ class MviRestaurantPresenter(
         val loadMoreRestaurantsState: Observable<PartialMviState> = intent(MviView::emitLoadMoreRestaurantsEvent)
             .subscribeOn(Schedulers.io())
             .debounce(200, TimeUnit.MILLISECONDS)
-            .doOnNext { Log.d("Intent", "Load more restaurants event.") }
+            .doOnNext { Log.d("Action", "Load more restaurants event.") }
             .switchMap { GetRestaurantsUseCase.getMoreRestaurants(latitude, longitude) }
             .observeOn(AndroidSchedulers.mainThread())
 
@@ -43,7 +43,7 @@ class MviRestaurantPresenter(
         val pullToRefreshState: Observable<PartialMviState> = intent(MviView::emitPullToRefreshEvent)
             .subscribeOn(Schedulers.io())
             .debounce(200, TimeUnit.MILLISECONDS)
-            .doOnNext { Log.d("Intent", "Pull to refresh event.") }
+            .doOnNext { Log.d("Action", "Pull to refresh event.") }
             .switchMap { GetRestaurantsUseCase.getRestaurantsByPTR(latitude, longitude) }
             .observeOn(AndroidSchedulers.mainThread())
 
