@@ -10,16 +10,20 @@ import com.hannesdorfmann.mosby3.ViewGroupMviDelegateCallback
 import com.hannesdorfmann.mosby3.ViewGroupMviDelegateImpl
 import com.hari.restaurantfinder.R
 import com.hari.restaurantfinder.RestaurantApplication
-import com.hari.restaurantfinder.model.mvi.MviState
+import com.hari.restaurantfinder.model.mvi.RestaurantViewState
 import com.hari.restaurantfinder.presenter.MviToolbarPresenter
 
 /**
  * @author Hari Hara Sudhan.N
  */
-class ToolbarView constructor(context: Context, attributeSet: AttributeSet) : Toolbar(context, attributeSet),
-    ToolbarMviView, ViewGroupMviDelegateCallback<ToolbarMviView, MviToolbarPresenter> {
+class CustomToolbar constructor(context: Context, attributeSet: AttributeSet) : Toolbar(context, attributeSet),
+    MviToolbarView, ViewGroupMviDelegateCallback<MviToolbarView, MviToolbarPresenter> {
 
-    private val delegate: ViewGroupMviDelegate<ToolbarMviView, MviToolbarPresenter> =
+    init {
+        setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
+    }
+
+    private val delegate: ViewGroupMviDelegate<MviToolbarView, MviToolbarPresenter> =
         ViewGroupMviDelegateImpl(this, this, true)
 
     override fun superOnSaveInstanceState(): Parcelable? {
@@ -37,11 +41,11 @@ class ToolbarView constructor(context: Context, attributeSet: AttributeSet) : To
         return RestaurantApplication.getDependencyInjection(context).newRestaurantToolbarPresenter()
     }
 
-    override fun getMvpView(): ToolbarMviView {
+    override fun getMvpView(): MviToolbarView {
         return this
     }
 
-    override fun displayRestaurantsCount(state: MviState) {
+    override fun displayRestaurantsCount(state: RestaurantViewState) {
         if((state.isPageLoading && state.error != null)
             || (state.isPullToRefresh && state.error != null)) {
             title = resources.getString(R.string.load_error)
@@ -78,3 +82,4 @@ class ToolbarView constructor(context: Context, attributeSet: AttributeSet) : To
         delegate.onRestoreInstanceState(state)
     }
 }
+

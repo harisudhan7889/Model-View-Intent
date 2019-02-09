@@ -11,9 +11,10 @@ import android.view.View
 import com.hannesdorfmann.mosby3.mvi.MviActivity
 import com.hari.restaurantfinder.R
 import com.hari.restaurantfinder.RestaurantApplication
-import com.hari.restaurantfinder.model.mvi.MviState
+import com.hari.restaurantfinder.model.mvi.RestaurantViewState
 import com.hari.restaurantfinder.presenter.MviRestaurantPresenter
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
+import com.jakewharton.rxbinding2.support.v7.widget.navigationClicks
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_restaurants.*
@@ -21,7 +22,7 @@ import kotlinx.android.synthetic.main.activity_restaurants.*
 /**
  * @author Hari Hara Sudhan.N
  */
-class RestaurantActivity : MviActivity<MviView, MviRestaurantPresenter>(), MviView {
+class RestaurantActivity : MviActivity<MviRestaurantView, MviRestaurantPresenter>(), MviRestaurantView {
 
     lateinit var adapter: RestaurantAdapter
 
@@ -54,28 +55,28 @@ class RestaurantActivity : MviActivity<MviView, MviRestaurantPresenter>(), MviVi
         return RestaurantApplication.getDependencyInjection(this).newRestaurantPresenter(latitude, longitude)
     }
 
-    override fun displayRestaurants(mviState: MviState) {
-        if (mviState.isPageLoading
-            && mviState.error != null) {
-            renderErrorState(mviState)
-        } else if (mviState.isPullToRefresh
-            && mviState.error != null) {
-            renderErrorStatePTR(mviState)
-        } else if (mviState.isPageLoading
-            && mviState.restaurantsObject == null) {
+    override fun displayRestaurants(restaurantViewState: RestaurantViewState) {
+        if (restaurantViewState.isPageLoading
+            && restaurantViewState.error != null) {
+            renderErrorState(restaurantViewState)
+        } else if (restaurantViewState.isPullToRefresh
+            && restaurantViewState.error != null) {
+            renderErrorStatePTR(restaurantViewState)
+        } else if (restaurantViewState.isPageLoading
+            && restaurantViewState.restaurantsObject == null) {
             renderPageLoading()
-        } else if (mviState.isPageLoading
-            && mviState.restaurantsObject != null) {
-            renderLoadingDataState(mviState)
-        } else if (mviState.isPullToRefresh
-            && mviState.restaurantsObject == null) {
+        } else if (restaurantViewState.isPageLoading
+            && restaurantViewState.restaurantsObject != null) {
+            renderLoadingDataState(restaurantViewState)
+        } else if (restaurantViewState.isPullToRefresh
+            && restaurantViewState.restaurantsObject == null) {
             renderPullToRefreshState()
-        } else if (mviState.isPullToRefresh
-            && mviState.restaurantsObject != null) {
-            renderDataStatePTR(mviState)
-        } else if (mviState.isMoreRestaurantsLoading
-            && mviState.restaurantsObject != null) {
-            renderDataState(mviState)
+        } else if (restaurantViewState.isPullToRefresh
+            && restaurantViewState.restaurantsObject != null) {
+            renderDataStatePTR(restaurantViewState)
+        } else if (restaurantViewState.isMoreRestaurantsLoading
+            && restaurantViewState.restaurantsObject != null) {
+            renderDataState(restaurantViewState)
         }
     }
 
@@ -89,32 +90,32 @@ class RestaurantActivity : MviActivity<MviView, MviRestaurantPresenter>(), MviVi
         networkError.visibility = View.GONE
     }
 
-    private fun renderDataStatePTR(state: MviState) {
+    private fun renderDataStatePTR(state: RestaurantViewState) {
         refreshContainer.isRefreshing = false
         recyclerView.visibility = View.VISIBLE
         adapter.setAdapterData(state.restaurantsObject!!.restaurants)
         adapter.notifyDataSetChanged()
     }
 
-    private fun renderDataState(state: MviState) {
+    private fun renderDataState(state: RestaurantViewState) {
         recyclerView.visibility = View.VISIBLE
         adapter.setAdapterData(state.restaurantsObject!!.restaurants)
         adapter.notifyDataSetChanged()
     }
 
-    private fun renderLoadingDataState(state: MviState) {
+    private fun renderLoadingDataState(state: RestaurantViewState) {
         loadingIndicator.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
         adapter.setAdapterData(state.restaurantsObject!!.restaurants)
         adapter.notifyDataSetChanged()
     }
 
-    private fun renderErrorState(state: MviState) {
+    private fun renderErrorState(state: RestaurantViewState) {
         loadingIndicator.visibility = View.GONE
         networkError.visibility = View.VISIBLE
     }
 
-    private fun renderErrorStatePTR(state: MviState) {
+    private fun renderErrorStatePTR(state: RestaurantViewState) {
         refreshContainer.isRefreshing = false
         networkError.visibility = View.VISIBLE
     }
@@ -123,6 +124,7 @@ class RestaurantActivity : MviActivity<MviView, MviRestaurantPresenter>(), MviVi
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_restaurants)
         setSupportActionBar(toolBar)
+        toolBar.setNavigationOnClickListener { finish() }
         val layoutManager = GridLayoutManager(this, 2)
         recyclerView.layoutManager = layoutManager
         adapter = RestaurantAdapter(this)

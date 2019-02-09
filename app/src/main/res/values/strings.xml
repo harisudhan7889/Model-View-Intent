@@ -1,4 +1,5 @@
 <resources>
+
     <string name="app_name">RestaurantFinder</string>
 
     <string name="load_more">Click to load more restaurants</string>

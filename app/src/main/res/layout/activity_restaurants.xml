@@ -44,7 +44,7 @@
 
     </FrameLayout>
 
-    <com.hari.restaurantfinder.view.ToolbarView
+    <com.hari.restaurantfinder.view.CustomToolbar
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"

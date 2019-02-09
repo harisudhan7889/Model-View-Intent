@@ -1,6 +1,6 @@
 package com.hari.restaurantfinder.di
 
-import com.hari.restaurantfinder.model.mvi.MviState
+import com.hari.restaurantfinder.model.mvi.RestaurantViewState
 import com.hari.restaurantfinder.presenter.MviRestaurantPresenter
 import com.hari.restaurantfinder.presenter.MviToolbarPresenter
 import io.reactivex.Observable
@@ -10,15 +10,15 @@ import io.reactivex.Observable
  */
 class DependencyInjection {
 
-    private lateinit var restaurantPresenter: MviRestaurantPresenter
+    private lateinit var mviRestaurantPresenter: MviRestaurantPresenter
 
     fun newRestaurantPresenter(latitude: Double, longitude: Double): MviRestaurantPresenter {
-        restaurantPresenter = MviRestaurantPresenter(latitude, longitude)
-        return restaurantPresenter
+        mviRestaurantPresenter = MviRestaurantPresenter(latitude, longitude)
+        return mviRestaurantPresenter
     }
 
     fun newRestaurantToolbarPresenter(): MviToolbarPresenter {
-        val restaurantsCountObservable: Observable<MviState> = restaurantPresenter
+        val restaurantsCountObservable: Observable<RestaurantViewState> = mviRestaurantPresenter
             .viewStateObservable
 
         return MviToolbarPresenter(restaurantsCountObservable)

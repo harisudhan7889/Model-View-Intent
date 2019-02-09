@@ -2,7 +2,7 @@ package com.hari.restaurantfinder.presenter
 
 import com.hari.restaurantfinder.api.RestaurantApi
 import com.hari.restaurantfinder.api.RestaurantApiEndpoint
-import com.hari.restaurantfinder.model.mvi.PartialMviState
+import com.hari.restaurantfinder.model.mvi.RestaurantActionState
 import io.reactivex.Observable
 
 /**
@@ -14,29 +14,29 @@ object GetRestaurantsUseCase {
       only the Loading, data, error states differs. */
 
     // Default Loading
-    fun getRestaurants(latitude: Double, longitude: Double): Observable<PartialMviState> {
+    fun getRestaurants(latitude: Double, longitude: Double): Observable<RestaurantActionState> {
         val endpoint = RestaurantApi.getClient().create(RestaurantApiEndpoint::class.java)
         return endpoint.getRestaurantsAtLocation(latitude, longitude, 0, 3)
-            .map<PartialMviState> { PartialMviState.DataState(it) }
-            .startWith(PartialMviState.LoadingState)
-            .onErrorReturn { (PartialMviState.ErrorState(it)) }
+            .map<RestaurantActionState> { RestaurantActionState.DataState(it) }
+            .startWith(RestaurantActionState.LoadingState)
+            .onErrorReturn { (RestaurantActionState.ErrorState(it)) }
     }
 
     // Load more restaurants
-    fun getMoreRestaurants(latitude: Double, longitude: Double): Observable<PartialMviState> {
+    fun getMoreRestaurants(latitude: Double, longitude: Double): Observable<RestaurantActionState> {
         val endpoint = RestaurantApi.getClient().create(RestaurantApiEndpoint::class.java)
         return endpoint.getRestaurantsAtLocation(latitude, longitude, 0, 3)
-            .map<PartialMviState> { PartialMviState.LoadMoreDataState(it) }
-            .startWith(PartialMviState.LoadMoreState)
-            .onErrorReturn { (PartialMviState.LoadMoreErrorState(it)) }
+            .map<RestaurantActionState> { RestaurantActionState.LoadMoreDataState(it) }
+            .startWith(RestaurantActionState.LoadMoreState)
+            .onErrorReturn { (RestaurantActionState.LoadMoreErrorState(it)) }
     }
 
     // PullToRefresh
-    fun getRestaurantsByPTR(latitude: Double, longitude: Double) : Observable<PartialMviState> {
+    fun getRestaurantsByPTR(latitude: Double, longitude: Double) : Observable<RestaurantActionState> {
         val endpoint = RestaurantApi.getClient().create(RestaurantApiEndpoint::class.java)
         return endpoint.getRestaurantsAtLocation(latitude, longitude, 0, 3)
-            .map<PartialMviState> { PartialMviState.DataState(it) }
-            .startWith(PartialMviState.PullToRefreshState)
-            .onErrorReturn{(PartialMviState.ErrorState(it))}
+            .map<RestaurantActionState> { RestaurantActionState.DataState(it) }
+            .startWith(RestaurantActionState.PullToRefreshState)
+            .onErrorReturn{(RestaurantActionState.ErrorState(it))}
     }
 }

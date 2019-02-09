@@ -5,7 +5,7 @@ import com.hari.restaurantfinder.model.RestaurantsObject
 /**
  * @author Hari Hara Sudhan.N
  */
-data class MviState(
+data class RestaurantViewState(
     val isPageLoading: Boolean = false,
     val isPullToRefresh: Boolean = false,
     val isMoreRestaurantsLoading: Boolean = false,
@@ -16,12 +16,12 @@ data class MviState(
         return Builder(this)
     }
 
-    class Builder(mviState: MviState) {
-        private var isPageLoading = mviState.isPageLoading
-        private var isPullToRefresh = mviState.isPullToRefresh
-        private var isMoreRestaurantsLoading = mviState.isMoreRestaurantsLoading
-        private var restaurantsObject: RestaurantsObject? = mviState.restaurantsObject
-        private var error: Throwable? = mviState.error
+    class Builder(restaurantViewState: RestaurantViewState) {
+        private var isPageLoading = restaurantViewState.isPageLoading
+        private var isPullToRefresh = restaurantViewState.isPullToRefresh
+        private var isMoreRestaurantsLoading = restaurantViewState.isMoreRestaurantsLoading
+        private var restaurantsObject: RestaurantsObject? = restaurantViewState.restaurantsObject
+        private var error: Throwable? = restaurantViewState.error
 
         fun isPageLoading(isPageLoading: Boolean): Builder {
             this.isPageLoading = isPageLoading
@@ -48,8 +48,8 @@ data class MviState(
             return this
         }
 
-        fun build(): MviState {
-            return MviState(isPageLoading, isPullToRefresh, isMoreRestaurantsLoading, restaurantsObject, error)
+        fun build(): RestaurantViewState {
+            return RestaurantViewState(isPageLoading, isPullToRefresh, isMoreRestaurantsLoading, restaurantsObject, error)
         }
     }
 }
