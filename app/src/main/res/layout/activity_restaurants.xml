@@ -3,7 +3,8 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
 
     <FrameLayout
             android:id="@+id/container"
@@ -12,7 +13,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0">
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintTop_toBottomOf="@id/toolBar">
 
         <android.support.v4.widget.SwipeRefreshLayout
                 android:id="@+id/refreshContainer"
@@ -41,5 +43,13 @@
                 android:layout_gravity="center"/>
 
     </FrameLayout>
+
+    <com.hari.restaurantfinder.view.ToolbarView
+            android:id="@+id/toolBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            android:elevation="@dimen/toolbar_elevation"/>
 
 </android.support.constraint.ConstraintLayout>

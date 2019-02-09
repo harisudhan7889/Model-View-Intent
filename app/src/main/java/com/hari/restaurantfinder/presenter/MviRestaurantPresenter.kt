@@ -9,7 +9,6 @@ import com.hari.restaurantfinder.model.mvi.PartialMviState
 import com.hari.restaurantfinder.view.MviView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
@@ -149,5 +148,9 @@ class MviRestaurantPresenter(
                     .build()
             }
         }
+    }
+
+    public override fun getViewStateObservable(): Observable<MviState> {
+        return super.getViewStateObservable()
     }
 }

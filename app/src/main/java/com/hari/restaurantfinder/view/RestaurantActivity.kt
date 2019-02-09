@@ -10,6 +10,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import com.hannesdorfmann.mosby3.mvi.MviActivity
 import com.hari.restaurantfinder.R
+import com.hari.restaurantfinder.RestaurantApplication
 import com.hari.restaurantfinder.model.mvi.MviState
 import com.hari.restaurantfinder.presenter.MviRestaurantPresenter
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
@@ -49,7 +50,8 @@ class RestaurantActivity : MviActivity<MviView, MviRestaurantPresenter>(), MviVi
                 longitude = location.longitude
             }
         }
-        return MviRestaurantPresenter(latitude, longitude)
+
+        return RestaurantApplication.getDependencyInjection(this).newRestaurantPresenter(latitude, longitude)
     }
 
     override fun displayRestaurants(mviState: MviState) {
@@ -120,6 +122,7 @@ class RestaurantActivity : MviActivity<MviView, MviRestaurantPresenter>(), MviVi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_restaurants)
+        setSupportActionBar(toolBar)
         val layoutManager = GridLayoutManager(this, 2)
         recyclerView.layoutManager = layoutManager
         adapter = RestaurantAdapter(this)
